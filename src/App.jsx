@@ -100,12 +100,22 @@ function App() {
                     width: "100vw",
                     height: "100vh",
                     display: "flex",
+                    flexDirection: "column",
                     justifyContent: "center",
                     alignItems: "center",
                     padding: "1rem 0",
                 }}
             >
-                <MainContainer style={{ width: "100%", maxWidth: "1000px" }}>
+                <h1
+                    style={{
+                        textTransform: "capitalize",
+                    }}
+                >
+                    Chatbot trò chuyện tâm lí
+                </h1>
+                <MainContainer
+                    style={{ width: "100%", maxWidth: "1000px", flex: 1 }}
+                >
                     <ChatContainer>
                         <MessageList
                             scrollBehavior="smooth"
