@@ -16,7 +16,7 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { toast } from 'react-hot-toast'
@@ -35,6 +35,8 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
     'ai-token',
     null
   )
+
+  const [newMessage, setNewMessage] = useState<boolean>(false)
   const [previewTokenDialog, setPreviewTokenDialog] = useState(IS_PREVIEW)
   const [previewTokenInput, setPreviewTokenInput] = useState(previewToken ?? '')
   const { messages, append, reload, stop, isLoading, input, setInput } =
@@ -55,8 +57,28 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
           router.push(`/chat/${id}`, { shallow: true, scroll: false })
           router.refresh()
         }
+        setNewMessage(true)
       }
     })
+
+  const speech = async (text: string) => {
+    const response = await fetch('/api/speech', {
+      method: 'POST',
+      body: JSON.stringify({ text })
+    })
+    const data = await response.blob()
+    // convert buffer data to webm audio
+    const audio = new Audio(URL.createObjectURL(data))
+    audio.play()
+  }
+
+  useEffect(() => {
+    if (isLoading || !newMessage) return
+    setNewMessage(false)
+    const content = messages[messages.length - 1].content
+    speech(content)
+  }, [isLoading, messages, newMessage])
+
   return (
     <>
       <div className={cn('pb-[200px] pt-4 md:pt-10', className)}>
