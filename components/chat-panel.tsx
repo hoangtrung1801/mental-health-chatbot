@@ -12,14 +12,9 @@ import { ChatShareDialog } from '@/components/chat-share-dialog'
 export interface ChatPanelProps
   extends Pick<
     UseChatHelpers,
-    | 'append'
-    | 'isLoading'
-    | 'reload'
-    | 'messages'
-    | 'stop'
-    | 'input'
-    | 'setInput'
+    'isLoading' | 'messages' | 'input' | 'setInput'
   > {
+  append: (message: any) => Promise<void>
   id?: string
   title?: string
 }
@@ -28,9 +23,9 @@ export function ChatPanel({
   id,
   title,
   isLoading,
-  stop,
+  // stop,
   append,
-  reload,
+  // reload,
   input,
   setInput,
   messages
@@ -45,7 +40,7 @@ export function ChatPanel({
           {isLoading ? (
             <Button
               variant="outline"
-              onClick={() => stop()}
+              // onClick={() => stop()}
               className="bg-background"
             >
               <IconStop className="mr-2" />
@@ -54,10 +49,10 @@ export function ChatPanel({
           ) : (
             messages?.length >= 2 && (
               <div className="flex space-x-2">
-                <Button variant="outline" onClick={() => reload()}>
+                {/* <Button variant="outline" onClick={() => reload()}>
                   <IconRefresh className="mr-2" />
                   Regenerate response
-                </Button>
+                </Button> */}
                 {id && title ? (
                   <>
                     <Button

@@ -5,9 +5,10 @@ import { ChatMessage } from '@/components/chat-message'
 
 export interface ChatList {
   messages: Message[]
+  isLoading: boolean
 }
 
-export function ChatList({ messages }: ChatList) {
+export function ChatList({ messages, isLoading }: ChatList) {
   if (!messages.length) {
     return null
   }
@@ -22,6 +23,18 @@ export function ChatList({ messages }: ChatList) {
           )}
         </div>
       ))}
+      {isLoading && (
+        <>
+          <Separator className="my-4 md:my-8" />
+          <ChatMessage
+            message={{
+              id: 'ai',
+              content: '...',
+              role: 'system'
+            }}
+          />
+        </>
+      )}
     </div>
   )
 }

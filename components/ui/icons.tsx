@@ -104,6 +104,16 @@ function IconOpenAI({ className, ...props }: React.ComponentProps<'svg'>) {
   )
 }
 
+function IconDoctor({ className, ...props }: React.ComponentProps<'img'>) {
+  return (
+    <img
+      src="/doctor.png"
+      className={cn('h-4 w-4', className)}
+      alt="doctor image"
+    />
+  )
+}
+
 function IconVercel({ className, ...props }: React.ComponentProps<'svg'>) {
   return (
     <svg
@@ -538,5 +548,6 @@ export {
   IconExternalLink,
   IconChevronUpDown,
   IconRecord,
-  IconUpload
+  IconUpload,
+  IconDoctor
 }

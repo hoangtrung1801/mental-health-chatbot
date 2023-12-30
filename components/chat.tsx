@@ -21,6 +21,7 @@ import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { toast } from 'react-hot-toast'
 import { usePathname, useRouter } from 'next/navigation'
+import { helloMessage } from '@/lib/constants'
 
 const IS_PREVIEW = process.env.VERCEL_ENV === 'preview'
 export interface ChatProps extends React.ComponentProps<'div'> {
@@ -36,73 +37,115 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
     null
   )
 
-  const [newMessage, setNewMessage] = useState<boolean>(false)
-  const [previewTokenDialog, setPreviewTokenDialog] = useState(IS_PREVIEW)
-  const [previewTokenInput, setPreviewTokenInput] = useState(previewToken ?? '')
-  const { messages, append, reload, stop, isLoading, input, setInput } =
-    useChat({
-      initialMessages,
-      id,
-      body: {
-        id,
-        previewToken
-      },
-      onResponse(response) {
-        if (response.status === 401) {
-          toast.error(response.statusText)
-        }
-      },
-      onFinish() {
-        if (!path.includes('chat')) {
-          router.push(`/chat/${id}`, { shallow: true, scroll: false })
-          router.refresh()
-        }
-        setNewMessage(true)
-      }
-    })
+  // const [newMessage, setNewMessage] = useState<boolean>(false)
+  // const [previewTokenDialog, setPreviewTokenDialog] = useState(IS_PREVIEW)
+  // const [previewTokenInput, setPreviewTokenInput] = useState(previewToken ?? '')
+  // const { messages, append, reload, stop, isLoading, input, setInput } =
+  //   useChat({
+  //     initialMessages,
+  //     id,
+  //     body: {
+  //       id,
+  //       previewToken
+  //     },
+  //     onResponse(response) {
+  //       if (response.status === 401) {
+  //         toast.error(response.statusText)
+  //       }
+  //     },
+  //     onFinish() {
+  //       // if (!path.includes('chat')) {
+  //       //   router.push(`/chat/${id}`, { shallow: true, scroll: false })
+  //       //   router.refresh()
+  //       // }
+  //       setNewMessage(true)
+  //     }
+  //   })
 
-  const speech = async (text: string) => {
-    const response = await fetch('/api/speech', {
+  // const speech = async (text: string) => {
+  //   const response = await fetch('/api/speech', {
+  //     method: 'POST',
+  //     body: JSON.stringify({ text })
+  //   })
+  //   const data = await response.blob()
+  //   // convert buffer data to webm audio
+  //   const audio = new Audio(URL.createObjectURL(data))
+  //   audio.play()
+  // }
+
+  // useEffect(() => {
+  //   if (isLoading || !newMessage) return
+  //   setNewMessage(false)
+  //   const content = messages[messages.length - 1].content
+  //   speech(content)
+  // }, [isLoading, messages, newMessage])
+
+  const [input, setInput] = useState<string>('')
+  const [messages, setMessages] = useState<Message[]>([helloMessage])
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const send = async (messages: Message[]) => {
+    setIsLoading(true)
+    const response = await fetch('/api/chat', {
       method: 'POST',
-      body: JSON.stringify({ text })
+      body: JSON.stringify({
+        messages: messages.map(({ id, ...rest }) => ({ ...rest }))
+      })
     })
-    const data = await response.blob()
-    // convert buffer data to webm audio
-    const audio = new Audio(URL.createObjectURL(data))
-    audio.play()
+    const data = await response.json()
+    console.log({ data })
+
+    const { message, audio } = data
+    setMessages(prev => [
+      ...prev,
+      { id: 'ai', content: message, role: 'system' }
+    ])
+
+    // convert audio string which is base64 to blob
+    const blob = new Blob([Buffer.from(audio, 'base64')], {
+      type: 'audio/ogg;codecs=opus'
+    })
+    const audioEl = new Audio(URL.createObjectURL(blob))
+    audioEl.play()
+    setIsLoading(false)
   }
 
-  useEffect(() => {
-    if (isLoading || !newMessage) return
-    setNewMessage(false)
-    const content = messages[messages.length - 1].content
-    speech(content)
-  }, [isLoading, messages, newMessage])
+  const append = async (message: Message) => {
+    const newMessages = [...messages, message]
+    setMessages(newMessages)
+    // setMessages([
+    //   ...newMessages,
+    //   {
+    //     id: 'system',
+    //     role: 'system',
+    //     content: ''
+    //   }
+    // ])
+    await send(newMessages)
+  }
 
   return (
     <>
       <div className={cn('pb-[200px] pt-4 md:pt-10', className)}>
-        {messages.length ? (
+        {messages.length && (
           <>
-            <ChatList messages={messages} />
+            <ChatList messages={messages} isLoading={isLoading} />
             <ChatScrollAnchor trackVisibility={isLoading} />
           </>
-        ) : (
-          <EmptyScreen setInput={setInput} />
         )}
       </div>
       <ChatPanel
         id={id}
         isLoading={isLoading}
-        stop={stop}
+        // stop={stop}
         append={append}
-        reload={reload}
+        // reload={reload}
         messages={messages}
         input={input}
         setInput={setInput}
       />
 
-      <Dialog open={previewTokenDialog} onOpenChange={setPreviewTokenDialog}>
+      {/* <Dialog open={previewTokenDialog} onOpenChange={setPreviewTokenDialog}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Enter your OpenAI Key</DialogTitle>
@@ -136,7 +179,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
             </Button>
           </DialogFooter>
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
     </>
   )
 }

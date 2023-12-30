@@ -1,6 +1,7 @@
 import { Button, buttonVariants } from '@/components/ui/button'
 import {
   IconArrowElbow,
+  IconCheck,
   IconPlus,
   IconRecord,
   IconUpload
@@ -162,6 +163,27 @@ export function PromptForm({
     target.value = ''
   }
 
+  const testing = async () => {
+    console.log('testing')
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      body: JSON.stringify({
+        messages: []
+      })
+    })
+    const data = await response.json()
+    console.log({ data })
+
+    const { message, audio } = data
+
+    // convert audio string which is base64 to blob
+    const blob = new Blob([Buffer.from(audio, 'base64')], {
+      type: 'audio/ogg;codecs=opus'
+    })
+    const audioEl = new Audio(URL.createObjectURL(blob))
+    audioEl.play()
+  }
+
   return (
     <form
       onSubmit={async e => {
@@ -204,8 +226,18 @@ export function PromptForm({
           placeholder="Send a message."
           spellCheck={false}
           className="min-h-[60px] w-full resize-none bg-transparent px-4 py-[1.3rem] focus-within:outline-none sm:text-sm"
+          disabled={isRecording}
         />
         <div className="absolute right-0 top-4 sm:right-4 flex space-x-1">
+          {/* <Tooltip>
+            <TooltipTrigger asChild>
+              <Button size="icon" onClick={testing}>
+                <IconCheck />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Test</TooltipContent>
+          </Tooltip>
+
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -228,7 +260,7 @@ export function PromptForm({
               </Button>
             </TooltipTrigger>
             <TooltipContent>Upload</TooltipContent>
-          </Tooltip>
+          </Tooltip> */}
 
           <Tooltip>
             <TooltipTrigger asChild>
