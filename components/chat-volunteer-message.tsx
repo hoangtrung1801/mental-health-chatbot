@@ -35,7 +35,7 @@ export function ChatVolunteerMessage({ message, ...props }: ChatMessageProps) {
       <div
         className={cn(
           'flex-1 px-4 py-2 ml-2 space-y-2 overflow-hidden border bg-white rounded-md max-w-[80%]',
-          message.role === 'user' && 'ml-auto'
+          message.role === 'user' && 'ml-auto mr-2'
         )}
       >
         <MemoizedReactMarkdown
