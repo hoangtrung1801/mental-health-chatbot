@@ -75,11 +75,11 @@ const findVolunteer = (name: string, age: number, mentalCategory: string) => {
 }
 
 const Wrapper = ({ children }: { children: React.ReactNode }) => (
-  <div className="min-h-[600px] max-w-3xl w-full mx-auto flex justify-center">
-    <div className=" flex flex-col items-center space-y-8">
-      <div className="flex flex-col items-center">
-        <h1 className="text-3xl font-bold">Chat with volunteer</h1>
-        <p className="text-primary/60">
+  <div className="min-h-[600px] max-w-5xl w-full mx-auto flex justify-center">
+    <div className=" flex flex-col items-center space-y-8 flex-1">
+      <div className="flex flex-col items-center w-full max-w-3xl mt-8">
+        <h1 className="text-3xl font-bold">Trò chuyện với tình nguyện viên</h1>
+        <p className="text-primary/60 mb-8">
           Chúng tôi ở đây để giúp bạn kết nối với các tình nguyện viên
         </p>
         {children}
