@@ -114,6 +114,16 @@ function IconDoctor({ className, ...props }: React.ComponentProps<'img'>) {
   )
 }
 
+function IconVolunteer({ className, ...props }: React.ComponentProps<'img'>) {
+  return (
+    <img
+      src="/volunteer.png"
+      className={cn('h-4 w-4', className)}
+      alt="doctor image"
+    />
+  )
+}
+
 function IconVercel({ className, ...props }: React.ComponentProps<'svg'>) {
   return (
     <svg
@@ -549,5 +559,6 @@ export {
   IconChevronUpDown,
   IconRecord,
   IconUpload,
-  IconDoctor
+  IconDoctor,
+  IconVolunteer
 }

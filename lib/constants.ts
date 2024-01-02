@@ -27,3 +27,56 @@ export const helloMessage: Message = {
   content:
     'Tôi là bác sĩ Lê Văn Tâm, bạn cảm thấy thoải mái khi gọi tôi là Tâm. Hôm nay, tôi ở đây để lắng nghe và hỗ trợ bạn. Có điều gì đang lo lắng hoặc bạn muốn chia sẻ với tôi không?'
 }
+
+export const MENTAL_CATEGORIES = [
+  {
+    id: 'family',
+    label: 'Gia đình',
+    children: [
+      {
+        id: 'family-1',
+        label: 'Không hòa hợp trong gia đình'
+      },
+      {
+        id: 'family-2',
+        label: 'Áp lực và kỳ vọng của bố mẹ'
+      },
+      {
+        id: 'family-3',
+        label: 'Khoảng cách thế hệ'
+      }
+    ]
+  },
+  {
+    id: 'friend',
+    label: 'Bạn bè',
+    children: [
+      {
+        id: 'friend-1',
+        label: 'Không có bạn bè'
+      },
+      {
+        id: 'friend-2',
+        label: 'Tách biệt với các mối quan hệ'
+      },
+      {
+        id: 'friend-3',
+        label: 'Áp lực đồng trang lứa'
+      }
+    ]
+  },
+  {
+    id: 'study',
+    label: 'Học tập',
+    children: [
+      {
+        id: 'study-1',
+        label: 'Khó thích ứng với môi trường mới'
+      },
+      {
+        id: 'study-2',
+        label: 'Áp lực điểm số'
+      }
+    ]
+  }
+]
