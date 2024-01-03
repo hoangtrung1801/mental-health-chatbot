@@ -53,6 +53,9 @@ const volunteers = [
 const findVolunteer = (name: string, age: number, mentalCategory: string) => {
   const queue = volunteers.slice()
   queue.sort((a, b) => {
+    // 2 tiêu chí
+    // 1. mental category
+    // 2. age
     if (a.mentalCategories.includes(mentalCategory)) {
       return -1
     } else if (b.mentalCategories.includes(mentalCategory)) {

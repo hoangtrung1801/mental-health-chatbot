@@ -25,7 +25,7 @@ export const helloMessage: Message = {
   id: 'hello-message',
   role: 'system',
   content:
-    'Tôi là bác sĩ Lê Văn Tâm, bạn cảm thấy thoải mái khi gọi tôi là Tâm. Hôm nay, tôi ở đây để lắng nghe và hỗ trợ bạn. Có điều gì đang lo lắng hoặc bạn muốn chia sẻ với tôi không?'
+    'Tôi là tư vấn viên từ YouthSound, bạn cảm thấy thoải mái khi gọi tôi là Tâm. Hôm nay, tôi ở đây để lắng nghe và hỗ trợ bạn. Có điều gì đang lo lắng hoặc bạn muốn chia sẻ với tôi không?'
 }
 
 export const MENTAL_CATEGORIES = [
