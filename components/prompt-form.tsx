@@ -49,9 +49,9 @@ export function PromptForm({
     useReactMediaRecorder({
       audio: true,
       video: false,
-      blobPropertyBag: {
-        type: mimeType
-      },
+      // blobPropertyBag: {
+      //   type: mimeType
+      // },
       onStart: () => {
         console.log('start recording')
         setIsRecording(true)
@@ -134,7 +134,8 @@ export function PromptForm({
     // const file = new File([blob], 'recording.mp3', {
     //   type: 'audio/mp3'
     // })
-    const mimeType = findMimeType()
+    // const mimeType = findMimeType()
+    const mimeType = blob.type
     // toast(`blob type: ${blob.type}, mimeType: ${mimeType}`)
     console.log(`blob type: ${blob.type}, mimeType: ${mimeType}`)
 
