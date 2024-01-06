@@ -18,6 +18,7 @@ import { useRouter } from 'next/navigation'
 import OpenAI from 'openai'
 import * as React from 'react'
 import toast from 'react-hot-toast'
+import { useReactMediaRecorder } from 'react-media-recorder-2'
 import Textarea from 'react-textarea-autosize'
 
 export interface PromptProps
@@ -38,9 +39,28 @@ export function PromptForm({
   const router = useRouter()
 
   const [isRecording, setIsRecording] = React.useState(false)
-  const [recorder, setRecorder] = React.useState<MediaRecorder | undefined>(
-    undefined
-  )
+  // const [recorder, setRecorder] = React.useState<MediaRecorder | undefined>(
+  //   undefined
+  // )
+  const { status, startRecording, stopRecording, mediaBlobUrl } =
+    useReactMediaRecorder({
+      audio: true,
+      video: false,
+      blobPropertyBag: {
+        type: 'audio/mp3'
+      },
+      onStart: () => {
+        console.log('start recording')
+        setIsRecording(true)
+        toast('Đang thu âm!')
+      },
+      onStop: (blobUrl, blob) => {
+        toast('Đã dừng thu âm!')
+        console.log('end recording', blobUrl)
+        setIsRecording(false)
+        process(blob)
+      }
+    })
   // const [chunks, setChunks] = React.useState<Blob[]>([])
 
   // const checkAudioLevel = stream => {
@@ -75,51 +95,43 @@ export function PromptForm({
   //   checkAudioLevel(stream)
   // }
 
-  const handleError = () => {}
+  // const startRecording = async () => {
+  //   const stream = await navigator.mediaDevices.getUserMedia({
+  //     audio: true
+  //   })
+  //   console.log('start recording')
+  //   stream.addEventListener('addtrack', event => {
+  //     console.log('addtrack', event)
+  //   })
+  //   const recorder = new MediaRecorder(stream, {
+  //     mimeType: 'audio/webm'
+  //   })
 
-  React.useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus()
-    }
-  }, [])
+  //   toast('Đang thu âm!')
+  //   setRecorder(recorder)
+  //   setIsRecording(true)
 
-  const startRecording = async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio: true
-    })
-    console.log('start recording')
-    stream.addEventListener('addtrack', event => {
-      console.log('addtrack', event)
-    })
-    const recorder = new MediaRecorder(stream, {
-      mimeType: 'audio/webm'
-    })
+  //   recorder.start()
+  //   recorder.addEventListener('dataavailable', event => {
+  //     const url = URL.createObjectURL(event.data)
+  //     console.log(url)
+  //     process(event.data)
+  //   })
+  // }
 
-    toast('Đang thu âm!')
-    setRecorder(recorder)
-    setIsRecording(true)
-
-    recorder.start()
-    recorder.addEventListener('dataavailable', event => {
-      const url = URL.createObjectURL(event.data)
-      console.log(url)
-      process(event.data)
-    })
-  }
-
-  const stopRecording = () => {
-    toast('Đã dừng thu âm!')
-    console.log('stop recording')
-    recorder?.stop()
-    setIsRecording(false)
-  }
+  // const stopRecording = () => {
+  //   toast('Đã dừng thu âm!')
+  //   console.log('stop recording')
+  //   recorder?.stop()
+  //   setIsRecording(false)
+  // }
 
   const process = async (blob: Blob) => {
     const formData = new FormData()
-    const file = new File([blob], 'recording.webm', {
-      type: 'audio/webm'
-    })
-    formData.append('file', file)
+    // const file = new File([blob], 'recording.mp3', {
+    //   type: 'audio/mp3'
+    // })
+    formData.append('file', blob, 'recording.mp3')
     const response = await fetch('/api/audio', {
       method: 'POST',
       body: formData
@@ -166,26 +178,11 @@ export function PromptForm({
     target.value = ''
   }
 
-  const testing = async () => {
-    console.log('testing')
-    const response = await fetch('/api/chat', {
-      method: 'POST',
-      body: JSON.stringify({
-        messages: []
-      })
-    })
-    const data = await response.json()
-    console.log({ data })
-
-    const { message, audio } = data
-
-    // convert audio string which is base64 to blob
-    const blob = new Blob([Buffer.from(audio, 'base64')], {
-      type: 'audio/ogg;codecs=opus'
-    })
-    const audioEl = new Audio(URL.createObjectURL(blob))
-    audioEl.play()
-  }
+  React.useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus()
+    }
+  }, [])
 
   return (
     <form
@@ -271,9 +268,6 @@ export function PromptForm({
                 size="icon"
                 // disabled={isLoading}
                 onClick={() =>
-                  isRecording ? stopRecording() : startRecording()
-                }
-                onTouchStart={() =>
                   isRecording ? stopRecording() : startRecording()
                 }
                 disabled={isLoading}

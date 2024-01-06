@@ -3,11 +3,19 @@ import { type UseChatHelpers } from 'ai/react'
 
 import { shareChat } from '@/app/actions'
 import { Button } from '@/components/ui/button'
-import { PromptForm } from '@/components/prompt-form'
 import { ButtonScrollToBottom } from '@/components/button-scroll-to-bottom'
 import { IconRefresh, IconShare, IconStop } from '@/components/ui/icons'
 import { FooterText } from '@/components/footer'
 import { ChatShareDialog } from '@/components/chat-share-dialog'
+
+import dynamic from 'next/dynamic'
+
+const PromptForm = dynamic(
+  () => import('@/components/prompt-form').then(mod => mod.PromptForm),
+  {
+    ssr: false
+  }
+)
 
 export interface ChatPanelProps
   extends Pick<
