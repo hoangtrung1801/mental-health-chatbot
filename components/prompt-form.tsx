@@ -47,7 +47,7 @@ export function PromptForm({
       audio: true,
       video: false,
       blobPropertyBag: {
-        type: 'audio/mp3'
+        type: 'audio/webm'
       },
       onStart: () => {
         console.log('start recording')
@@ -59,6 +59,10 @@ export function PromptForm({
         console.log('end recording', blobUrl)
         setIsRecording(false)
         process(blob)
+      },
+      askPermissionOnMount: true,
+      mediaRecorderOptions: {
+        mimeType: 'audio/webm'
       }
     })
   // const [chunks, setChunks] = React.useState<Blob[]>([])

@@ -80,7 +80,7 @@ const findVolunteer = (name: string, age: number, mentalCategory: string) => {
 const Wrapper = ({ children }: { children: React.ReactNode }) => (
   <div className="min-h-[600px] max-w-5xl w-full mx-auto flex justify-center">
     <div className=" flex flex-col items-center space-y-8 flex-1">
-      <div className="flex flex-col items-center w-full max-w-3xl mt-8">
+      <div className="flex flex-col items-center w-full max-w-3xl mt-8 pt-8 px-4 md:px-0">
         <h1 className="text-3xl font-bold">Trò chuyện với tình nguyện viên</h1>
         <p className="text-primary/60 mb-8">
           Chúng tôi ở đây để giúp bạn kết nối với các tình nguyện viên
@@ -226,13 +226,13 @@ const ChatVolunteerPage = () => {
     return (
       <Wrapper>
         <div className="flex flex-col space-y-2">
-          <Alert>
+          <Alert className="w-full">
             <InfoIcon className="h-4 w-4" />
             <AlertTitle>
               Chúc mừng bạn đã được ghép cặp với tình nguyện viên
             </AlertTitle>
           </Alert>
-          <Card className="w-[500px]">
+          <Card className="">
             <CardHeader>
               <CardTitle>Thông tin tình nguyện viên</CardTitle>
               {/* <CardDescription>Card Description</CardDescription> */}
