@@ -46,7 +46,8 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
 
     // convert audio string which is base64 to blob
     const blob = new Blob([Buffer.from(audio, 'base64')], {
-      type: 'audio/ogg;codecs=opus'
+      // type: 'audio/ogg;codecs=opus'
+      type: 'audio/mp3'
     })
     const audioEl = new Audio(URL.createObjectURL(blob))
     audioEl.play()

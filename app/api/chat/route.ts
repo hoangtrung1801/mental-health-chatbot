@@ -41,10 +41,10 @@ export async function POST(req: Request) {
 
   const voiceRes = await openai.audio.speech.create({
     model: 'tts-1',
-    voice: 'alloy',
+    voice: 'nova',
     input: message,
     speed: 1.3,
-    response_format: 'opus'
+    response_format: 'mp3'
   })
   let chunks = []
   for await (const chunk of voiceRes.body as any) {

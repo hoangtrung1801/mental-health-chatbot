@@ -17,6 +17,7 @@ import { UseChatHelpers } from 'ai/react'
 import { useRouter } from 'next/navigation'
 import OpenAI from 'openai'
 import * as React from 'react'
+import toast from 'react-hot-toast'
 import Textarea from 'react-textarea-autosize'
 
 export interface PromptProps
@@ -94,6 +95,7 @@ export function PromptForm({
       mimeType: 'audio/webm'
     })
 
+    toast('Đang thu âm!')
     setRecorder(recorder)
     setIsRecording(true)
 
@@ -106,6 +108,7 @@ export function PromptForm({
   }
 
   const stopRecording = () => {
+    toast('Đã dừng thu âm!')
     console.log('stop recording')
     recorder?.stop()
     setIsRecording(false)
