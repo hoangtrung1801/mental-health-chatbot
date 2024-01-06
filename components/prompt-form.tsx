@@ -11,6 +11,7 @@ import {
   TooltipContent,
   TooltipTrigger
 } from '@/components/ui/tooltip'
+import findMimeType from '@/lib/findMimeType'
 import { useEnterSubmit } from '@/lib/hooks/use-enter-submit'
 import { cn } from '@/lib/utils'
 import { UseChatHelpers } from 'ai/react'
@@ -26,6 +27,8 @@ export interface PromptProps
   onSubmit: (value: string) => void
   isLoading: boolean
 }
+
+const mimeType = findMimeType()
 
 export function PromptForm({
   onSubmit,
@@ -47,7 +50,7 @@ export function PromptForm({
       audio: true,
       video: false,
       blobPropertyBag: {
-        type: 'audio/webm'
+        type: mimeType
       },
       onStart: () => {
         console.log('start recording')
@@ -59,10 +62,6 @@ export function PromptForm({
         console.log('end recording', blobUrl)
         setIsRecording(false)
         process(blob)
-      },
-      askPermissionOnMount: true,
-      mediaRecorderOptions: {
-        mimeType: 'audio/webm'
       }
     })
   // const [chunks, setChunks] = React.useState<Blob[]>([])
@@ -135,7 +134,15 @@ export function PromptForm({
     // const file = new File([blob], 'recording.mp3', {
     //   type: 'audio/mp3'
     // })
-    formData.append('file', blob, 'recording.mp3')
+    const mimeType = findMimeType()
+    // toast(`blob type: ${blob.type}, mimeType: ${mimeType}`)
+    console.log(`blob type: ${blob.type}, mimeType: ${mimeType}`)
+
+    formData.append(
+      'file',
+      blob,
+      `recording.${mimeType.split(';')[0].slice(6)}`
+    )
     const response = await fetch('/api/audio', {
       method: 'POST',
       body: formData
