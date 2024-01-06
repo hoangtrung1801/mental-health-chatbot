@@ -56,7 +56,7 @@ async function UserOrLogin() {
 export function Header() {
   return (
     <header className="sticky top-0 z-50 flex items-center justify-between w-full h-16 px-4 bg-[url('/background.png')] text-white ">
-      <a href="/">
+      <a href="/" className="hidden md:block">
         <div className="flex items-center  ">
           {/* <h1 className="font-bold">YouthSound</h1> */}
           <IconLogo className="w-36" />
@@ -67,7 +67,7 @@ export function Header() {
           href="/chat"
           className={cn(
             buttonVariants({ variant: 'default' }),
-            'bg-lime-400 text-black hover:text-white'
+            'bg-lime-400 text-black hover:text-white h-fit'
           )}
         >
           <span>Trò chuyện với AI</span>
@@ -76,7 +76,7 @@ export function Header() {
           href="/chat-volunteer"
           className={cn(
             buttonVariants({ variant: 'default' }),
-            'bg-lime-400 text-black hover:text-white'
+            'bg-lime-400 text-black hover:text-white h-fit'
           )}
         >
           <span>Trò chuyện với tình nguyện viên</span>

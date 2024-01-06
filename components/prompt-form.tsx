@@ -270,6 +270,9 @@ export function PromptForm({
                 onClick={() =>
                   isRecording ? stopRecording() : startRecording()
                 }
+                onTouchStart={() =>
+                  isRecording ? stopRecording() : startRecording()
+                }
                 disabled={isLoading}
               >
                 <IconRecord
